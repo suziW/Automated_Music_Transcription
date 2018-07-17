@@ -23,10 +23,10 @@ def readWav():
     params = sound_wave.getparams()
     duration = nframes / float(framerate)
 
-    print "frame rate: %d " % (framerate,)
-    print "nframes: %d" % (nframes,)
-    print "duration: %f seconds" % (duration,)
-    print scipy.array(sound_wave)
+    print("frame rate: %d " % (framerate,))
+    print("nframes: %d" % (nframes,))
+    print("duration: %f seconds" % (duration,))
+    print(scipy.array(sound_wave))
 
     return (sound_wave, nframes, framerate, duration, params)
 
@@ -181,7 +181,7 @@ class MIDI_Detector(object):
         return midi_notes
 
     def get_candidates_with_partials(self, frequencies, magnitudes):
-        print frequencies
+        print(frequencies)
         partial_margin = 11.0   # Hz
 
         # A list of frequencies of each candidate.
@@ -206,14 +206,14 @@ class MIDI_Detector(object):
 
         fft_length = int(duration * framerate)
         # For the FFT to work much faster take the length that is a power of 2.
-        fft_length = get_next_power_2(fft_length)
+        fft_length = int(get_next_power_2(fft_length))
         FFT = numpy.fft.fft(sample, n=fft_length)
 
         ''' ADJUSTING THRESHOLD - HIGHEST SPECTRAL PEAK METHOD'''
         threshold = 0
         power_spectra = []
         frequency_bin_with_max_spectrum = 0
-        for i in range(len(FFT) / 2):
+        for i in range(int(len(FFT) / 2)):
             power_spectrum = scipy.absolute(FFT[i]) * scipy.absolute(FFT[i])
             if power_spectrum > threshold:
                 threshold = power_spectrum
@@ -266,9 +266,9 @@ class MIDI_Detector(object):
         """
 
         framesamp = int(framesz * samplingFreq)
-        print 'FRAMESAMP: ' + str(framesamp)
+        print('FRAMESAMP: ' + str(framesamp))
         hopsamp = int(hop * samplingFreq)
-        print 'HOP SAMP: ' + str(hopsamp)
+        print('HOP SAMP: ' + str(hopsamp))
         # Modification: using Hanning window instead of Hamming - by Pertusa
         w = signal.hann(framesamp)
         X = numpy.array([numpy.fft.fft(w * x[i:i + framesamp])
@@ -330,7 +330,7 @@ class MIDI_Detector(object):
         """
 
         means = []
-        for bin, freqs in clusters.iteritems():
+        for bin, freqs in clusters.items():
             means.append(sum(freqs) / len(freqs))
         return means
 
@@ -446,4 +446,4 @@ class MIDI_Detector(object):
 if __name__ == '__main__':
     MIDI_detector = MIDI_Detector(sys.argv[1])
     midi_notes = MIDI_detector.detect_MIDI_notes()
-    print midi_notes
+    print(midi_notes)
